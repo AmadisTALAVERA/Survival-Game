@@ -5,16 +5,19 @@ using UnityEngine;
 
 public class DoorTrigger : MonoBehaviour
 {
-    // Start is called before the first frame update
+    public bool isClosed = true;
+
     void Start()
     {
         
     }
 
-    // Update is called once per frame
     void Update()
     {
-        
+        if (isClosed == false)
+        {
+            print("hey");
+        }
     }
 
     private void OnCollisionEnter(Collision collision)

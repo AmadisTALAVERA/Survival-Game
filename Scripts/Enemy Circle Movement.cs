@@ -10,17 +10,21 @@ public class EnemyCircleMovement : MonoBehaviour
     public float Speed;
     public bool isTrigger;
     //public bool isColiding = false;
-
     public Vector2 StartPosition;
+    private Vector2 lastPosition;
 
-    // Start is called before the first frame update
+    public GameObject SpriteEnemy;
+    SpriteRenderer spriteRenderer;
+    public Animator EnemyAnimator;
+
     void Start()
     {
         isTrigger = false;
         StartPosition = GetComponent<Transform>().position;
+        lastPosition = GetComponent<Transform>().position;
+        spriteRenderer = SpriteEnemy.GetComponent<SpriteRenderer>();
     }
 
-    // Update is called once per frame
     void Update()
     {
         //if (!isColiding)
@@ -32,14 +36,24 @@ public class EnemyCircleMovement : MonoBehaviour
         {
             GetComponent<Transform>().position = Vector2.MoveTowards(GetComponent<Transform>().position, StartPosition, Speed * Time.deltaTime);
         }
-        /*}
+
+        Vector2 currentPosition = GetComponent<Transform>().position;
+
+        float SpeedEnemy = (currentPosition - lastPosition).magnitude;
+        if (SpeedEnemy > 0)
+            EnemyAnimator.SetBool("EnemyMoving", true);
         else
-        {
-            //isColiding = false;
-        }*/
+            EnemyAnimator.SetBool("EnemyMoving", false);
+
+        if (lastPosition.x > currentPosition.x)
+            spriteRenderer.flipX = true;
+        else if (lastPosition.x < currentPosition.x)
+            spriteRenderer.flipX = false;
+
+        lastPosition = currentPosition;
     }
 
-    private void OnTriggerStay(Collider other)
+    private void OnTriggerStay2D(Collider2D other)
     {
         if (other.tag == "Player")
         {
@@ -47,23 +61,11 @@ public class EnemyCircleMovement : MonoBehaviour
         }
     }
 
-    private void OnTriggerExit(Collider other)
+    private void OnTriggerExit2D(Collider2D other)
     {
         if (other.tag == "Player")
         {
             isTrigger = false;
         }
     }
-
-    /*
-    private void OnCollisionEnter(Collision collision)
-    {
-        //isColiding = true;
-    }
-
-    private void OnCollisionExit(Collision collision)
-    {
-        //isColiding = false;
-    }
-    */
 }

@@ -7,14 +7,12 @@ public class RestartCollider : MonoBehaviour
     public bool isTouched;
     public Vector2 StartPosition;
 
-    // Start is called before the first frame update
     void Start()
     {
         isTouched = false;
         StartPosition = GetComponent<Transform>().position;
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (isTouched)
@@ -23,7 +21,7 @@ public class RestartCollider : MonoBehaviour
         }
     }
 
-    private void OnTriggerEnter(Collider enemy)
+    private void OnTriggerEnter2D(Collider2D enemy)
     {
         if (enemy.tag == "Enemy")
         {
@@ -31,7 +29,7 @@ public class RestartCollider : MonoBehaviour
         }
     }
 
-    private void OnTriggerExit(Collider enemy)
+    private void OnTriggerExit2D(Collider2D enemy)
     {
         if (enemy.tag == "Enemy")
         {

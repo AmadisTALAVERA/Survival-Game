@@ -8,14 +8,19 @@ public class EnemySquareMovement : MonoBehaviour
     public bool isTrigger;
     public GameObject EnemyCore;
 
-    // Start is called before the first frame update
+    private Vector2 lastPosition;
+    SpriteRenderer spriteRenderer;
+    public Animator EnemyAnimator;
+
     void Start()
     {
         isTrigger = false;
         //StartPosition = GetComponent<Transform>().position;
+        lastPosition = EnemyCore.GetComponent<Transform>().position;
+
+        spriteRenderer = EnemyCore.GetComponent<SpriteRenderer>();
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (isTrigger)
@@ -26,9 +31,25 @@ public class EnemySquareMovement : MonoBehaviour
         {
             EnemyCore.GetComponent<Transform>().position = Vector2.MoveTowards(EnemyCore.GetComponent<Transform>().position, GetComponent<Transform>().position, Speed * Time.deltaTime);
         }
+
+        Vector2 currentPosition = EnemyCore.GetComponent<Transform>().position;
+
+        float SpeedEnemy = (currentPosition - lastPosition).magnitude;
+        if (SpeedEnemy > 0)
+            EnemyAnimator.SetBool("EnemyMoving", true);
+        else
+            EnemyAnimator.SetBool("EnemyMoving", false);
+
+
+        if (lastPosition.x > currentPosition.x)//inverse anim
+            spriteRenderer.flipX = true;
+        else if (lastPosition.x < currentPosition.x)
+            spriteRenderer.flipX = false;
+
+        lastPosition = currentPosition;
     }
 
-    private void OnTriggerStay(Collider other)
+    private void OnTriggerStay2D(Collider2D other)
     {
         if (other.tag == "Player")
         {
@@ -36,7 +57,7 @@ public class EnemySquareMovement : MonoBehaviour
         }
     }
 
-    private void OnTriggerExit(Collider other)
+    private void OnTriggerExit2D(Collider2D other)
     {
         if (other.tag == "Player")
         {
